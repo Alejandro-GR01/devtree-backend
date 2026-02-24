@@ -1,6 +1,6 @@
 import colors from "colors";
 import mongoose from "mongoose";
-import User, {IUser} from "../models/User";
+
 
 export const connectDB = async () => {
   console.log(process.env.MONGO_URI);

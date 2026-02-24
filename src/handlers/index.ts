@@ -1,12 +1,11 @@
+import  jwt  from 'jsonwebtoken';
 import User from "../models/User";
 import type { Request, Response } from "express";
 import slug from "slug";
 import { checkPassword, hashPassword } from "../utils/auth";
-import { validationResult } from "express-validator";
+import { generateJWT } from "../utils/jwt";
 
 export const createAcount = async (req: Request, res: Response) => {
-
-
   const { email, password } = req.body;
 
   const userExist = await User.findOne({ email });
@@ -35,25 +34,28 @@ export const createAcount = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
   //revisr si el usuario esta registrado
-  if(!user){
-    const error = new Error('El usuario no existe');
-    return res.status(404).json({error: error.message})
-    
+  if (!user) {
+    const error = new Error("El usuario no existe");
+    return res.status(404).json({ error: error.message });
   }
 
   //comprobar el password
-  const isPasswordCorrect = await checkPassword(password, user.password)
+  const isPasswordCorrect = await checkPassword(password, user.password);
 
-  if(!isPasswordCorrect){
-    const error = new Error('Password incorrecto');
-    return res.status(401).json({error: error.message})
+  if (!isPasswordCorrect) {
+    const error = new Error("Password incorrecto");
+    return res.status(401).json({ error: error.message });
   }
-  res.send('Autenticado...')
-}
 
+  const token = generateJWT({ id: user.id });
 
+  res.send(token);
+};
+
+export const getUser = async (req: Request, res: Response) => {
+ console.log('desde getUser', req.user)
+};
