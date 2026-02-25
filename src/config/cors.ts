@@ -1,5 +1,5 @@
 import { CorsOptions } from "cors";
-console.log(process.argv)
+
 
 
 export const corsConfig: CorsOptions = {
@@ -7,7 +7,7 @@ export const corsConfig: CorsOptions = {
     const whiteList = [process.env.FRONTEND_URL];
     //si se ejecuta desde el escript de desarrollo pnpm ru dev:api permite el origin undefined
     if(process.argv[2] === '--api'){
-      console.log('Ejecutando en modo desarrollo, permitiendo origin undefined')
+      console.log("Permitiendo origin undefined para desarrollo")
       whiteList.push(undefined)
     }
 
